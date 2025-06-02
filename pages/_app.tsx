@@ -1,33 +1,34 @@
 import type { AppProps } from "next/app";
 import { CartProvider } from "../context/CartContext";
+import { ThemeProvider } from "../context/ThemeContext";
 import "../src/app/globals.css";
-import { useEffect, useState } from "react";
+import { Inter, Montserrat, Poppins } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+});
+
+const poppins = Poppins({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-poppins',
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [dark, setDark] = useState(false);
-
-  useEffect(() => {
-    if (dark) {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    }
-  }, [dark]);
-
   return (
-    <CartProvider>
-      <div style={{position: "fixed", top: 18, left: 18, zIndex: 9999}}>
-        <button
-          className="darkmode-switch"
-          onClick={() => setDark((d) => !d)}
-          aria-label="Alternar modo oscuro"
-        >
-          {/* Elimina los iconos, solo deja el slider */}
-          <span className={`slider ${dark ? "slider-dark" : ""}`}></span>
-        </button>
-      </div>
-      <Component {...pageProps} />
-    </CartProvider>
+    <ThemeProvider>
+      <CartProvider>
+        <main className={`${inter.variable} ${montserrat.variable} ${poppins.variable}`}>
+          <Component {...pageProps} />
+        </main>
+      </CartProvider>
+    </ThemeProvider>
   );
 }
 
